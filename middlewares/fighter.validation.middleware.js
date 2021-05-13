@@ -1,5 +1,6 @@
 const { fighter } = require("../models/fighter");
 const FighterService = require("../services/fighterService");
+const { responseMiddleware } = require("../middlewares/response.middleware");
 
 const createFighterValid = (req, res, next) => {
   let newFighter = req.body;
@@ -8,33 +9,45 @@ const createFighterValid = (req, res, next) => {
   let checkParams = newFighterKeys.every((key) => modelKeys.includes(key));
 
   if (checkParams !== true || newFighter.length < 3) {
-    throw Error("Incorect Fighter Data");
+    res.status(404);
+    res.err = "Incorect Fighter Data";
+    return responseMiddleware(req, res, next);
   }
 
   if (newFighter.length === 0) {
-    throw Error("Fighter data not found");
+    res.status(404);
+    res.err = "Fighter data not found";
+    return responseMiddleware(req, res, next);
   }
 
   if (!newFighter.health) {
     newFighter.health = 100;
   }
 
-  if (100 < newFighter.power < 1) {
-    throw Error("Please Enter correct Power");
+  if (1 > Number(newFighter.power) > 100) {
+    res.status(404);
+    res.err = "Please Enter correct Power";
+    return responseMiddleware(req, res, next);
   }
 
-  if (10 < newFighter.defense < 1) {
-    throw Error("Please Enter correct Defense");
+  if (1 > Number(newFighter.defense) > 10) {
+    res.status(404);
+    res.err = "Please Enter correct Defense";
+    return responseMiddleware(req, res, next);
   }
 
-  if (120 < newFighter.health < 80) {
-    throw Error("Please Enter correct Health");
+  if (80 > Number(newFighter.health) > 120) {
+    res.status(404);
+    res.err = "Please Enter correct Health";
+    return responseMiddleware(req, res, next);
   }
 
   const fighters = FighterService.getAllFighter();
   fighters.map((fighter) => {
     if (fighter.name.toLowerCase() === newFighter.name.toLowerCase()) {
-      throw Error("Found Fighter with same name, Please enter new name");
+      res.status(404);
+      res.err = "Found Fighter with same name, Please enter new name";
+      return responseMiddleware(req, res, next);
     }
   });
 
@@ -50,31 +63,49 @@ const updateFighterValid = (req, res, next) => {
   let checkParams = newFighterKeys.every((key) => modelKeys.includes(key));
 
   if (checkParams !== true) {
-    throw Error("Incorect Fighter Data");
+    res.status(404);
+    res.err = "Incorect Fighter Data";
+    return responseMiddleware(req, res, next);
   }
 
   if (newFighter.length === 0) {
-    throw Error("Fighter data not found");
+    res.status(404);
+    res.err = "Fighter data not found";
+    return responseMiddleware(req, res, next);
   }
 
-  if (100 < newFighter.power < 1) {
-    throw Error("Please Enter correct Power");
+  if (newFighter.power && 1 > Number(newFighter.power) > 100) {
+    res.status(404);
+    res.err = "Please Enter correct Power";
+    return responseMiddleware(req, res, next);
   }
 
-  if (10 < newFighter.defense < 1) {
-    throw Error("Please Enter correct Defense");
+  if (newFighter.defense && 1 > Number(newFighter.defense) > 10) {
+    res.status(404);
+    res.err = "Please Enter correct Defense";
+    return responseMiddleware(req, res, next);
   }
 
-  if (120 < newFighter.health < 80) {
-    throw Error("Please Enter correct Health");
+  if (
+    (newFighter.health && 80 > Number(newFighter.health)) ||
+    Number(newFighter.health) > 120
+  ) {
+    res.status(404);
+    res.err = "Please Enter correct Health";
+    return responseMiddleware(req, res, next);
   }
 
   const fighters = FighterService.getAllFighter();
   fighters
     .filter((fighter) => fighter.id !== id)
     .map((fighter) => {
-      if (fighter.name.toLowerCase() === newFighter.name.toLowerCase()) {
-        throw Error("Found Fighter with same name, Please enter new name");
+      if (
+        newFighter.name &&
+        fighter.name.toLowerCase() === newFighter.name.toLowerCase()
+      ) {
+        res.status(404);
+        res.err = "Found Fighter with same name, Please enter new name";
+        return responseMiddleware(req, res, next);
       }
     });
 
