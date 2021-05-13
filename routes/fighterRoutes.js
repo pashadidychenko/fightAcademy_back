@@ -79,8 +79,8 @@ router.delete(
       const id = req.params.id;
       let fighterData = FighterService.deleteFighter(id);
       let status = 200;
-      if (data.length) {
-        userData = { message: `Fighter with ${id} deleted` };
+      if (fighterData.length) {
+        fighterData = { message: `Fighter with id: ${id} deleted` };
       } else {
         status = 404;
       }

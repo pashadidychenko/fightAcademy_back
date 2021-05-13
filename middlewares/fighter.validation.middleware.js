@@ -24,19 +24,19 @@ const createFighterValid = (req, res, next) => {
     newFighter.health = 100;
   }
 
-  if (1 > Number(newFighter.power) > 100) {
+  if (Number(newFighter.power) > 100 || Number(newFighter.power < 1)) {
     res.status(404);
     res.err = "Please Enter correct Power";
     return responseMiddleware(req, res, next);
   }
 
-  if (1 > Number(newFighter.defense) > 10) {
+  if (Number(newFighter.defense) > 10 || Number(newFighter.defense) < 1) {
     res.status(404);
     res.err = "Please Enter correct Defense";
     return responseMiddleware(req, res, next);
   }
 
-  if (80 > Number(newFighter.health) > 120) {
+  if (Number(newFighter.health) > 120 || Number(newFighter.health) < 80) {
     res.status(404);
     res.err = "Please Enter correct Health";
     return responseMiddleware(req, res, next);
@@ -74,21 +74,27 @@ const updateFighterValid = (req, res, next) => {
     return responseMiddleware(req, res, next);
   }
 
-  if (newFighter.power && 1 > Number(newFighter.power) > 100) {
+  if (
+    (newFighter.power && Number(newFighter.power) > 100) ||
+    (newFighter.power && Number(newFighter.power < 1))
+  ) {
     res.status(404);
     res.err = "Please Enter correct Power";
     return responseMiddleware(req, res, next);
   }
 
-  if (newFighter.defense && 1 > Number(newFighter.defense) > 10) {
+  if (
+    (newFighter.defense && Number(newFighter.defense) > 10) ||
+    (newFighter.defense && Number(newFighter.defense) < 1)
+  ) {
     res.status(404);
     res.err = "Please Enter correct Defense";
     return responseMiddleware(req, res, next);
   }
 
   if (
-    (newFighter.health && 80 > Number(newFighter.health)) ||
-    Number(newFighter.health) > 120
+    (newFighter.health && Number(newFighter.health) > 120) ||
+    (newFighter.health && Number(newFighter.health) < 80)
   ) {
     res.status(404);
     res.err = "Please Enter correct Health";

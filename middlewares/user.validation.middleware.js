@@ -1,5 +1,6 @@
 const { user } = require("../models/user");
 const UserService = require("../services/userService");
+const { responseMiddleware } = require("../middlewares/response.middleware");
 
 const createUserValid = (req, res, next) => {
   let newUser = req.body;

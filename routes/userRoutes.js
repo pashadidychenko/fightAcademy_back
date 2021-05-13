@@ -79,8 +79,8 @@ router.delete(
       const id = req.params.id;
       let userData = UserService.deleteUser(id);
       let status = 200;
-      if (data.length) {
-        userData = { message: `User with ${id} deleted` };
+      if (userData.length) {
+        userData = { message: `User with id: ${id} deleted` };
       } else {
         status = 404;
       }
