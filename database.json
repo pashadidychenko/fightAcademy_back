@@ -1,5 +1,26 @@
 {
-  "users": [],
-  "fighters": [],
+  "users": [
+    {
+      "firstName": "new",
+      "lastName": "test",
+      "email": "des@gmail.com",
+      "phoneNumber": "+380972333346",
+      "password": "123",
+      "id": "59b9644c-df8c-4f3a-a8aa-f884fced582b",
+      "createdAt": "2021-05-14T19:31:10.736Z",
+      "updatedAt": "2021-05-14T19:32:03.479Z"
+    }
+  ],
+  "fighters": [
+    {
+      "name": "Figter",
+      "power": 100,
+      "defense": 10,
+      "health": 100,
+      "id": "11171816-652f-41f0-af56-01799b322c91",
+      "createdAt": "2021-05-14T19:25:21.436Z",
+      "updatedAt": "2021-05-14T19:29:26.197Z"
+    }
+  ],
   "fights": []
 }

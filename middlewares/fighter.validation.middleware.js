@@ -96,11 +96,13 @@ const updateFighterValid = (req, res, next) => {
   const newFighterKeys = Object.keys(newFighter);
   let checkParams = newFighterKeys.every((key) => modelKeys.includes(key));
 
-  if (
-    checkParams !== true ||
-    newFighterKeys.length < 3 ||
-    newFighterKeys.length > 4
-  ) {
+  if (checkParams !== true) {
+    res.status(400);
+    res.err = "Incorect Fighter Data";
+    return responseMiddleware(req, res, next);
+  }
+
+  if (newFighter.id) {
     res.status(400);
     res.err = "Incorect Fighter Data";
     return responseMiddleware(req, res, next);
@@ -113,7 +115,7 @@ const updateFighterValid = (req, res, next) => {
   }
 
   if (
-    isNaN(newFighter.power) ||
+    (newFighter.power && isNaN(newFighter.power)) ||
     (newFighter.power && Number(newFighter.power) > 100) ||
     Number(newFighter.power) < 1
   ) {
@@ -123,7 +125,7 @@ const updateFighterValid = (req, res, next) => {
   }
 
   if (
-    isNaN(newFighter.defense) ||
+    (newFighter.defense && isNaN(newFighter.defense)) ||
     (newFighter.defense && Number(newFighter.defense) > 10) ||
     Number(newFighter.defense) < 1
   ) {
@@ -133,7 +135,7 @@ const updateFighterValid = (req, res, next) => {
   }
 
   if (
-    isNaN(newFighter.health) ||
+    (newFighter.health && isNaN(newFighter.health)) ||
     (newFighter.health && Number(newFighter.health) > 120) ||
     Number(newFighter.health) < 80
   ) {

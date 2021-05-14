@@ -66,7 +66,7 @@ const updateUserValid = (req, res, next) => {
   const newUserKeys = Object.keys(newUser);
   let checkParams = newUserKeys.every((key) => modelKeys.includes(key));
 
-  if (checkParams !== true || newUserKeys.length !== 5) {
+  if (checkParams !== true) {
     res.status(400);
     res.err = "Incorect User Data";
     return responseMiddleware(req, res, next);
