@@ -8,15 +8,37 @@ const createFighterValid = (req, res, next) => {
   const newFighterKeys = Object.keys(newFighter);
   let checkParams = newFighterKeys.every((key) => modelKeys.includes(key));
 
-  if (checkParams !== true || newFighter.length < 3) {
-    res.status(404);
+  if (
+    checkParams !== true ||
+    newFighterKeys.length < 3 ||
+    newFighterKeys.length > 4
+  ) {
+    res.status(400);
     res.err = "Incorect Fighter Data";
     return responseMiddleware(req, res, next);
   }
 
   if (newFighter.length === 0) {
-    res.status(404);
+    res.status(400);
     res.err = "Fighter data not found";
+    return responseMiddleware(req, res, next);
+  }
+
+  if (!newFighter.name || newFighter.name.length === 0) {
+    res.status(400);
+    res.err = "Fighter name not found";
+    return responseMiddleware(req, res, next);
+  }
+
+  if (!newFighter.power) {
+    res.status(400);
+    res.err = "Fighter power not found";
+    return responseMiddleware(req, res, next);
+  }
+
+  if (!newFighter.defense) {
+    res.status(400);
+    res.err = "Fighter defense not found";
     return responseMiddleware(req, res, next);
   }
 
@@ -24,20 +46,32 @@ const createFighterValid = (req, res, next) => {
     newFighter.health = 100;
   }
 
-  if (Number(newFighter.power) > 100 || Number(newFighter.power < 1)) {
-    res.status(404);
+  if (
+    isNaN(newFighter.power) ||
+    Number(newFighter.power) > 100 ||
+    Number(newFighter.power) < 1
+  ) {
+    res.status(400);
     res.err = "Please Enter correct Power";
     return responseMiddleware(req, res, next);
   }
 
-  if (Number(newFighter.defense) > 10 || Number(newFighter.defense) < 1) {
-    res.status(404);
+  if (
+    isNaN(newFighter.defense) ||
+    Number(newFighter.defense) > 10 ||
+    Number(newFighter.defense) < 1
+  ) {
+    res.status(400);
     res.err = "Please Enter correct Defense";
     return responseMiddleware(req, res, next);
   }
 
-  if (Number(newFighter.health) > 120 || Number(newFighter.health) < 80) {
-    res.status(404);
+  if (
+    isNaN(newFighter.health) ||
+    Number(newFighter.health) > 120 ||
+    Number(newFighter.health) < 80
+  ) {
+    res.status(400);
     res.err = "Please Enter correct Health";
     return responseMiddleware(req, res, next);
   }
@@ -45,7 +79,7 @@ const createFighterValid = (req, res, next) => {
   const fighters = FighterService.getAllFighter();
   fighters.map((fighter) => {
     if (fighter.name.toLowerCase() === newFighter.name.toLowerCase()) {
-      res.status(404);
+      res.status(400);
       res.err = "Found Fighter with same name, Please enter new name";
       return responseMiddleware(req, res, next);
     }
@@ -62,41 +96,48 @@ const updateFighterValid = (req, res, next) => {
   const newFighterKeys = Object.keys(newFighter);
   let checkParams = newFighterKeys.every((key) => modelKeys.includes(key));
 
-  if (checkParams !== true) {
-    res.status(404);
+  if (
+    checkParams !== true ||
+    newFighterKeys.length < 3 ||
+    newFighterKeys.length > 4
+  ) {
+    res.status(400);
     res.err = "Incorect Fighter Data";
     return responseMiddleware(req, res, next);
   }
 
   if (newFighter.length === 0) {
-    res.status(404);
+    res.status(400);
     res.err = "Fighter data not found";
     return responseMiddleware(req, res, next);
   }
 
   if (
+    isNaN(newFighter.power) ||
     (newFighter.power && Number(newFighter.power) > 100) ||
-    (newFighter.power && Number(newFighter.power < 1))
+    Number(newFighter.power) < 1
   ) {
-    res.status(404);
+    res.status(400);
     res.err = "Please Enter correct Power";
     return responseMiddleware(req, res, next);
   }
 
   if (
+    isNaN(newFighter.defense) ||
     (newFighter.defense && Number(newFighter.defense) > 10) ||
-    (newFighter.defense && Number(newFighter.defense) < 1)
+    Number(newFighter.defense) < 1
   ) {
-    res.status(404);
+    res.status(400);
     res.err = "Please Enter correct Defense";
     return responseMiddleware(req, res, next);
   }
 
   if (
+    isNaN(newFighter.health) ||
     (newFighter.health && Number(newFighter.health) > 120) ||
-    (newFighter.health && Number(newFighter.health) < 80)
+    Number(newFighter.health) < 80
   ) {
-    res.status(404);
+    res.status(400);
     res.err = "Please Enter correct Health";
     return responseMiddleware(req, res, next);
   }
@@ -109,7 +150,7 @@ const updateFighterValid = (req, res, next) => {
         newFighter.name &&
         fighter.name.toLowerCase() === newFighter.name.toLowerCase()
       ) {
-        res.status(404);
+        res.status(400);
         res.err = "Found Fighter with same name, Please enter new name";
         return responseMiddleware(req, res, next);
       }
